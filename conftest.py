@@ -1,0 +1,1 @@
+# pytest configuration: adds root directory to Python path for module discovery
