@@ -23,7 +23,7 @@ def sample_poly_cbd(byte_input, eta):
         y = sum((b[2 * i * eta + eta + j]) for j in range(eta))
         coeff.append(field.reduce(x - y))
 
-    return coeff
+    return polynomial.poly(coeff)
 
 def expand(rho):
     k = params.k
