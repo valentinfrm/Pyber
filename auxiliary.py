@@ -1,3 +1,5 @@
+import params
+
 def bytes_to_bits(byte_array):
     result = []
     for b in byte_array:
@@ -13,3 +15,45 @@ def bits_to_bytes(bit_array):
             x += bit_array[i * 8 + j] * 2**j
         result.append(x)
     return result
+
+def byte_encode(d, int_input):
+    """
+    encodes a list of integers into a list of bytes
+
+    Args:
+        d (int): bits per coeff
+        int_input (list): 256 integers 
+    
+    Returns:
+        list: 32 * d bytes
+    """
+    bits = []
+    for i in range (params.n):
+        value = int_input[i]
+        for _ in range(d):
+            bits.append(value % 2) # always LSB
+            value = value >> 1
+
+    return bits_to_bytes(bits)
+
+def byte_decode(d, byte_input):
+    """
+    decodes a list of bytes into a list of integers
+
+    Args:
+        d (int): bits per coeff
+        byte_input (list): 32 * d bytes
+    
+    Returns:
+        list: 256 integers
+    """
+    bits = bytes_to_bits(byte_input)
+    
+    integers = []
+    i = 0
+    while i < len(bits):
+        int_value = sum(bits[i + j] * 2**j for j in range(d))
+        integers.append(int_value)
+        i = i + d
+    
+    return integers
