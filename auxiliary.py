@@ -1,13 +1,16 @@
 import params
 
 def bytes_to_bits(byte_array):
+    """LSB first"""
     result = []
     for b in byte_array:
-        for i in range(8):
-            result.append(b >> (7 - i) & 1)
+        for _ in range(8):
+            result.append(b & 1) # LSB
+            b = b >> 1
     return result
 
 def bits_to_bytes(bit_array):
+    """LSB first"""
     result = []
     for i in range(len(bit_array) // 8): # cuts off remaining bits if len(bit_array) % 8 != 0
         x = 0
