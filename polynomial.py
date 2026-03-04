@@ -5,25 +5,25 @@ class poly:
     """Polynomial in Rq = Zq[x]/(x^n + 1)"""
     def __init__(self, coeff):
         self.coeff = coeff
-        self.k = len(self.coeff)
+        self.n = len(self.coeff)
 
 
     def poly_add(self, poly_b):
-        for i in range(self.k):
+        for i in range(self.n):
             self.coeff[i] = add(self.coeff[i], poly_b.coeff[i])
 
 
     def poly_sub(self, poly_b):
-        for i in range(self.k):
+        for i in range(self.n):
             self.coeff[i] = sub(self.coeff[i], poly_b.coeff[i])
 
     
     def poly_mul(self, poly_b):
         """multiply using negacyclic convolution -> NTT later"""
         tmp = list(self.coeff) # copy coeffs to avoid overwriting while reading
-        for row in range(self.k):
+        for row in range(self.n):
             c = 0
-            for col in range(self.k): 
+            for col in range(self.n): 
                 og_index = (row - col) % params.n # index in original poly (wraps around negacyclically)
                 v = mul(tmp[og_index], poly_b.coeff[col])
                 if col > row:
