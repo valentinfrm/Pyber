@@ -3,7 +3,6 @@ import field
 import hashlib
 import polynomial
 from auxiliary import *
-import numpy as np
 
 def sample_poly_cbd(byte_input, eta):
     """
@@ -37,31 +36,33 @@ def expand(rho):
 def sample_poly_shake(byte_input):
     # problem -> no iterative squeezing
     # solution -> large enough pre calculated digest
-    #               around (4096-3329)/4096 = 19% rejected -> on average 316 coeff needed -> 1000 bytes to make sure
+    # around (4096-3329)/4096 = 19% rejected -> on average 316 coeff needed -> 840 Bytes = 5*Keccak
     shake = hashlib.shake_128()
     shake.update(byte_input)
-    byte_digest = shake.digest(1000)
+    byte_digest = shake.digest(5000)
     
     di = 0
     i = 0
     coeff = []
 
     while i < 256:
-        bit_digest = bytes_to_bits(byte_digest[di:di+3]) # 3 bytes -> 24 bits -> 2 * 12 (12 bits needed for max 3329)
-        c1 = sum((bit_digest[j]) * 2**j for j in range(12))
-        c2 = sum((bit_digest[12 + j]) * 2**j for j in range(12))
+        print(di, len(byte_digest))
+        C = byte_digest[di:di+3] # 3 bytes -> 24 bits -> 2 * 12 (12 bits needed for max 3329)
+        d1 = C[0] + 256 * (C[1] % 16)
+        d2 = (C[1] >> 4) + 16 * C[2]
 
         # rejection sampling (if too high -> resample)
-        if c1 < params.q:
-            coeff.append(c1)
-            i = i + 1
+        if d1 < params.q and i < 256:
+            coeff.append(d1)
+            i += 1
 
-        if c2 < params.q:
-            coeff.append(c2)
-            i = i + 1
+        if d2 < params.q and i < 256:
+            coeff.append(d2)
+            i += 1
         
-        di = di + 3
+        di += 3
 
+    print(i)
     p = polynomial.poly(coeff)
     p.poly_reduce()
     return p
