@@ -54,3 +54,12 @@ def pke_keygen(d):
     dk = auxiliary.byte_encode(12, s_coeff)
 
     return (ek, dk)
+
+
+def transpose_matrix(A):
+    k = len(A)
+    A_t = [[None] * k for _ in range(k)]
+    for row in range(k):
+        for col in range(k):
+            A_t[col][row] = A[row][col]
+    return A_t
