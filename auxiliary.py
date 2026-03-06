@@ -1,7 +1,7 @@
 import params
 
 def bytes_to_bits(byte_array):
-    """LSB first"""
+    #LSB first
     result = []
     for b in byte_array:
         for _ in range(8):
@@ -10,7 +10,7 @@ def bytes_to_bits(byte_array):
     return result
 
 def bits_to_bytes(bit_array):
-    """LSB first"""
+    #LSB first
     result = []
     for i in range(len(bit_array) // 8): # cuts off remaining bits if len(bit_array) % 8 != 0
         x = 0
@@ -57,3 +57,42 @@ def byte_decode(d, byte_input):
         integers.append(int_value)
     
     return integers
+
+def transpose_matrix(A):
+    k = len(A)
+    A_t = [[None] * k for _ in range(k)]
+    for row in range(k):
+        for col in range(k):
+            A_t[col][row] = A[row][col]
+    return A_t
+
+def compress(x, d):
+    """
+    calculates x ⟼ ⌈(2^d / q) ⋅ x⌋ mod 2^d
+
+    Args:
+        x (int): coeff to compress
+        d (int): bit size after compression
+    Returns:
+        int: compressed value of bit size d in Z_2^d 
+    Note:
+        Reformulated to avoid floating point arithmetic
+        ⌈x⌋ = ⌊x + 0.5⌋ = ⌊(2x + 1) / 2⌋
+    """
+    q = params.q
+    return ((x * (1 << (d + 1)) + q) // (2 * q)) % (1 << d)
+
+def decompress(y, d):
+    """
+    calculates y ⟼ ⌈(q / 2^d) ⋅ y⌋ 
+
+    Args:
+        y (int): coeff to decompress
+        d (int): bit size after compression
+    Returns:
+        int: decompressed coefficient in Z
+    Note:
+        Reformulated to avoid floating point arithmetic
+    """
+    q = params.q
+    return ((2 * q * y) + (1 << d)) // (1 << (d + 1))
