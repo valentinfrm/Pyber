@@ -19,7 +19,7 @@ def bits_to_bytes(bit_array):
         result.append(x)
     return result
 
-def byte_encode(d, int_input):
+def byte_encode(int_input, d):
     """
     encodes a list of integers into a list of bytes
 
@@ -38,7 +38,7 @@ def byte_encode(d, int_input):
 
     return bytes(bits_to_bytes(bits))
 
-def byte_decode(d, byte_input):
+def byte_decode(byte_input, d):
     """
     decodes a list of bytes into a list of integers
 
