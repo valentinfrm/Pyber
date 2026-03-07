@@ -82,6 +82,25 @@ def compress(x, d):
     q = params.q
     return ((x * (1 << (d + 1)) + q) // (2 * q)) % (1 << d)
 
+def compress_poly(x, d):
+    """
+    calculates x ⟼ ⌈(2^d / q) ⋅ x⌋ mod 2^d for all elements of the list
+
+    Args:
+        x (list): coeffs to compress
+        d (int): bit size after compression
+    Returns:
+        list: compressed values of bit size d in Z_2^d 
+    Note:
+        Reformulated to avoid floating point arithmetic
+        ⌈x⌋ = ⌊x + 0.5⌋ = ⌊(2x + 1) / 2⌋
+    """
+    q = params.q
+    for i in range(len(x)):
+        x[i] = compress(x[i], d)
+    return x
+
+
 def decompress(y, d):
     """
     calculates y ⟼ ⌈(q / 2^d) ⋅ y⌋ 
@@ -90,9 +109,26 @@ def decompress(y, d):
         y (int): coeff to decompress
         d (int): bit size after compression
     Returns:
-        int: decompressed coefficient in Z
+        int: decompressed coefficient in Z_q
     Note:
         Reformulated to avoid floating point arithmetic
     """
     q = params.q
     return ((2 * q * y) + (1 << d)) // (1 << (d + 1))
+
+def decompress_poly(y, d):
+    """
+    calculates y ⟼ ⌈(q / 2^d) ⋅ y⌋  for each element of the list
+
+    Args:
+        y (list): coeffs to decompress
+        d (int): bit size after compression
+    Returns:
+        list: decompressed coeffs in Z_q
+    Note:
+        Reformulated to avoid floating point arithmetic
+    """
+    q = params.q
+    for i in range(len(y)):
+        y[i] = decompress(y[i], d)
+    return y
