@@ -1,5 +1,6 @@
 from hash import G, PRF
-from sampling import sample_poly_cbd, expand
+from sampling import sample_poly_cbd
+from ntt import expand
 from polynomial import poly
 import params
 import auxiliary
@@ -59,7 +60,7 @@ def keygen(d):
 
 def encrypt(ek, m, r):
     """
-    encrypts a message using the encryption key :)
+    encrypts using the encryption key :)
     
     Args:
         ek (bytes): coeff of t + rho
