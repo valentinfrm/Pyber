@@ -59,9 +59,12 @@ def keygen():
     
     ek, dk = _keygen_internal(d, z)
 
+    key_pair_check(ek, dk)
+
     return ek, dk
 
 def encaps(ek):
+    encaps_check(ek)
     try:
         m = secrets.token_bytes(32)
     except OSError as e:
@@ -72,6 +75,7 @@ def encaps(ek):
     return K, c
 
 def decaps(dk, c):
+    decaps_check(dk, c)
     K_prime = _decaps_internal(dk, c)
     return K_prime
 
