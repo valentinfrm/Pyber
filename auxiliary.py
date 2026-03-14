@@ -95,11 +95,10 @@ def compress_poly(x, d):
         Reformulated to avoid floating point arithmetic
         ⌈x⌋ = ⌊x + 0.5⌋ = ⌊(2x + 1) / 2⌋
     """
-    q = params.q
+    x_cpy = list(x)
     for i in range(len(x)):
-        x[i] = compress(x[i], d)
-    return x
-
+        x_cpy[i] = compress(x[i], d)
+    return x_cpy
 
 def decompress(y, d):
     """
@@ -128,7 +127,7 @@ def decompress_poly(y, d):
     Note:
         Reformulated to avoid floating point arithmetic
     """
-    q = params.q
+    y_cpy = list(y)
     for i in range(len(y)):
-        y[i] = decompress(y[i], d)
-    return y
+        y_cpy[i] = decompress(y[i], d)
+    return y_cpy
