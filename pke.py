@@ -18,7 +18,7 @@ def keygen(d):
         dk (bytes): decryption key -> coeff of s
     """
 
-    rho, sigma = G(d + bytes([params.k]))
+    rho, sigma = G(d) #+ bytes([params.k])) Wwhy does it work now???
     A = expand(rho)
     N = 0
 
@@ -125,7 +125,7 @@ def encrypt(ek, m, r):
     # v = (t^T * y) + e2 + mu
     v = poly([0] * params.n) # just one poly because of dot product
     for i in range(params.k):
-        v += (t_polys[i] * y[i])
+        v += (t_polys[i] * y_hat[i])
     v = poly(iNTT(v.coeff)) + e2 + mu
         
     c1 = b""
