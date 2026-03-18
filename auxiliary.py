@@ -19,6 +19,7 @@ def bits_to_bytes(bit_array):
         result.append(x)
     return result
 
+
 def byte_encode(int_input, d):
     """
     encodes a list of integers into a list of bytes
@@ -30,12 +31,15 @@ def byte_encode(int_input, d):
     Returns:
         bytes: len(int_input) * d / 8 bytes
     """
+    n = len(int_input)
     int_full = 0
-    for i in range(256):
-        int_full |= int_input[256 - i - 1]
+    for i in range(n - 1):
+        int_full |= int_input[n - i - 1]
         int_full <<= d # filling from the right side
+    int_full |= int_input[0]
     
-    return int_full.to_bytes(32 * d, "little")
+    return int_full.to_bytes(n // 8 * d, "little")
+
 
 def byte_decode(byte_input, d):
     """
