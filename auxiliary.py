@@ -30,13 +30,12 @@ def byte_encode(int_input, d):
     Returns:
         bytes: len(int_input) * d / 8 bytes
     """
-    bits = []
-    for value in int_input:
-        for _ in range(d):
-            bits.append(value % 2) # always LSB
-            value = value >> 1
-
-    return bytes(bits_to_bytes(bits))
+    int_full = 0
+    for i in range(256):
+        int_full |= int_input[256 - i - 1]
+        int_full <<= d # filling from the right side
+    
+    return int_full.to_bytes(32 * d, "little")
 
 def byte_decode(byte_input, d):
     """
@@ -54,7 +53,7 @@ def byte_decode(byte_input, d):
     
     mask = (1 << d) - 1
     integers = [0] * n
-    
+
     for i in range(n):
         value = int_input & mask # int & bit = int
         integers[i] = value
