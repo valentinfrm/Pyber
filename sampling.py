@@ -19,6 +19,7 @@ def sample_poly_cbd(byte_input, eta):
 
     m1 = (1 << eta) - 1 # for eta = 2: 11b -> two bits
     m2 = (1 << 2 * eta) - 1 # total amount needed
+
     for i in range(256):
         tmp = int_input & m2
         x = (tmp & m1).bit_count() # bitcount == manual sum with loop
@@ -40,28 +41,30 @@ def expand(rho):
             A[i][j] = sample_NTT(rho + bytes([j]) + bytes([i]))
     return A
 
-
 def sample_NTT(byte_input):
     shake = SHAKE128.new(byte_input)
-    
-    di = 0
-    i = 0
-    coeff = []
+    all_bytes = shake.read(840)
 
-    while i < 256:
-        C = shake.read(3) # 3 bytes -> 24 bits -> 2 * 12 (12 bits needed for max 3329)
-        d1 = C[0] + 256 * (C[1] % 16)
-        d2 = (C[1] >> 4) + 16 * C[2]
+    i = 0
+    coeff = [0] * 256
+    pos = 0
+
+    while i < 256 and pos + 3 <= len(all_bytes):
+        c_bytes = all_bytes[pos:pos+3]
+        pos += 3
+
+        c_int = int.from_bytes(c_bytes, "little") # little -> d1 d2 d3 d4 d5 stream from shake
+
+        d1 = c_int & 0xFFF # bottom 12 Bits
+        d2 = (c_int >> 12) & 0xFFF
 
         # rejection sampling (if too high -> resample)
         if d1 < params.q and i < 256:
-            coeff.append(d1)
+            coeff[i] = d1
             i += 1
 
         if d2 < params.q and i < 256:
-            coeff.append(d2)
+            coeff[i] = d2
             i += 1
-        
-        di += 3
 
     return polynomial.poly(coeff)
