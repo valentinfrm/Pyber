@@ -1,17 +1,18 @@
-import params
-import polynomial
 from Crypto.Hash import SHAKE128
+
 from auxiliary import *
+import params
+from polynomial import poly
 
 def sample_poly_cbd(byte_input, eta):
     """
-    samples poly coeff from PRF output with CBD
+    samples a polynomial using the centered binomial distribution (CBD)
 
     Args:
         b (bytes): 64 * eta byte array
         eta (int): {2,3}
     Returns:
-        list: 256 coefficients in Zq
+        poly: polynomial with 256 coeffs in Zq
     """
 
     int_input = int.from_bytes(byte_input, "little")
@@ -28,12 +29,16 @@ def sample_poly_cbd(byte_input, eta):
 
         int_input >>= 2 * eta # cuts used ones off
 
-    return polynomial.poly(coeffs)
+    return poly(coeffs)
 
 def expand(rho):
     """
-    in NTT realm
+    samples a k x k matrix of polynomials in the NTT domain
+
+    Args:
+        rho (bytes): 32 byte seed
     """
+
     k = params.k
     A = [[None] * k for _ in range(k)]
     for i in range(k):
@@ -42,6 +47,11 @@ def expand(rho):
     return A
 
 def sample_NTT(byte_input):
+    """
+    Samples a polynomial directly in the NTT domain using rejection sampling
+    coeffs are generated with SHAKE128
+    """
+    
     shake = SHAKE128.new(byte_input)
     all_bytes = shake.read(840)
 
@@ -67,4 +77,4 @@ def sample_NTT(byte_input):
             coeff[i] = d2
             i += 1
 
-    return polynomial.poly(coeff)
+    return poly(coeff)
