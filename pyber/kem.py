@@ -61,7 +61,23 @@ def keygen():
     
     ek, dk = _keygen_internal(d, z)
 
-    key_pair_check(ek, dk)
+    return ek, dk
+
+def keygen_checked():
+    """
+    keygen with FIPS203 pair-wise consistenc check (4)
+    use this when fault attack resistance is required
+    the check adds ~1 encaps + decaps overhead
+    """
+    try :
+        d = secrets.token_bytes(32)
+        z = secrets.token_bytes(32)
+    except OSError as e:
+        raise RuntimeError("RNG failue: keygen") from e # e gets propagated
+    
+    ek, dk = _keygen_internal(d, z)
+
+    key_pair_check(ek,dk)
 
     return ek, dk
 
