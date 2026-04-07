@@ -7,7 +7,7 @@ import numpy as np
 from pyber import params
 from pyber.kem import keygen, encaps, decaps
 
-RUN_AMOUNT = 1
+RUN_COUNT = 20
 
 GREEN_LIGHT = "#E5FF54"
 GREEN_DARK = "#1C812A"
@@ -25,7 +25,7 @@ k_map = {
 }
 
 def to_ms(time):
-    return round(time / RUN_AMOUNT * 1000, 2) # round to 2 decimal points
+    return round(time / RUN_COUNT * 1000, 2) # round to 2 decimal points
 
 def set_params(version):
     for key, value in k_map[version].items():
@@ -42,48 +42,48 @@ ek, dk = keygen()
 K, c = encaps(ek)
 
 # globals make module-level names available to timeit
-result["pyber"]["512-keygen"] = to_ms(min(timeit.repeat('keygen()', number=RUN_AMOUNT, globals=globals())))
-result["pyber"]["512-encaps"] = to_ms(min(timeit.repeat('encaps(ek)', number=RUN_AMOUNT, globals=globals())))
-result["pyber"]["512-decaps"] = to_ms(min(timeit.repeat('decaps(dk, c)', number=RUN_AMOUNT, globals=globals())))
+result["pyber"]["512-keygen"] = to_ms(min(timeit.repeat('keygen()', number=RUN_COUNT, globals=globals())))
+result["pyber"]["512-encaps"] = to_ms(min(timeit.repeat('encaps(ek)', number=RUN_COUNT, globals=globals())))
+result["pyber"]["512-decaps"] = to_ms(min(timeit.repeat('decaps(dk, c)', number=RUN_COUNT, globals=globals())))
 
 ek, dk = ML_KEM_512.keygen()
 K, c = ML_KEM_512.encaps(ek)
 
-result["kyber_py"]["512-keygen"] = to_ms(min(timeit.repeat('ML_KEM_512.keygen()', number=RUN_AMOUNT, globals=globals())))
-result["kyber_py"]["512-encaps"] = to_ms(min(timeit.repeat('ML_KEM_512.encaps(ek)', number=RUN_AMOUNT, globals=globals())))
-result["kyber_py"]["512-decaps"] = to_ms(min(timeit.repeat('ML_KEM_512.decaps(dk, c)', number=RUN_AMOUNT, globals=globals())))
+result["kyber_py"]["512-keygen"] = to_ms(min(timeit.repeat('ML_KEM_512.keygen()', number=RUN_COUNT, globals=globals())))
+result["kyber_py"]["512-encaps"] = to_ms(min(timeit.repeat('ML_KEM_512.encaps(ek)', number=RUN_COUNT, globals=globals())))
+result["kyber_py"]["512-decaps"] = to_ms(min(timeit.repeat('ML_KEM_512.decaps(dk, c)', number=RUN_COUNT, globals=globals())))
 
 # ===== 768 =====
 set_params("ML-KEM-768")
 ek, dk = keygen()
 K, c = encaps(ek)
 
-result["pyber"]["768-keygen"] = to_ms(min(timeit.repeat('keygen()', number=RUN_AMOUNT, globals=globals())))
-result["pyber"]["768-encaps"] = to_ms(min(timeit.repeat('encaps(ek)', number=RUN_AMOUNT, globals=globals())))
-result["pyber"]["768-decaps"] = to_ms(min(timeit.repeat('decaps(dk, c)', number=RUN_AMOUNT, globals=globals())))
+result["pyber"]["768-keygen"] = to_ms(min(timeit.repeat('keygen()', number=RUN_COUNT, globals=globals())))
+result["pyber"]["768-encaps"] = to_ms(min(timeit.repeat('encaps(ek)', number=RUN_COUNT, globals=globals())))
+result["pyber"]["768-decaps"] = to_ms(min(timeit.repeat('decaps(dk, c)', number=RUN_COUNT, globals=globals())))
 
 ek, dk = ML_KEM_768.keygen()
 K, c = ML_KEM_768.encaps(ek)
 
-result["kyber_py"]["768-keygen"] = to_ms(min(timeit.repeat('ML_KEM_768.keygen()', number=RUN_AMOUNT, globals=globals())))
-result["kyber_py"]["768-encaps"] = to_ms(min(timeit.repeat('ML_KEM_768.encaps(ek)', number=RUN_AMOUNT, globals=globals())))
-result["kyber_py"]["768-decaps"] = to_ms(min(timeit.repeat('ML_KEM_768.decaps(dk, c)', number=RUN_AMOUNT, globals=globals())))
+result["kyber_py"]["768-keygen"] = to_ms(min(timeit.repeat('ML_KEM_768.keygen()', number=RUN_COUNT, globals=globals())))
+result["kyber_py"]["768-encaps"] = to_ms(min(timeit.repeat('ML_KEM_768.encaps(ek)', number=RUN_COUNT, globals=globals())))
+result["kyber_py"]["768-decaps"] = to_ms(min(timeit.repeat('ML_KEM_768.decaps(dk, c)', number=RUN_COUNT, globals=globals())))
 
 # ===== 1024 =====
 set_params("ML-KEM-1024")
 ek, dk = keygen()
 K, c = encaps(ek)
 
-result["pyber"]["1024-keygen"] = to_ms(min(timeit.repeat('keygen()', number=RUN_AMOUNT, globals=globals())))
-result["pyber"]["1024-encaps"] = to_ms(min(timeit.repeat('encaps(ek)', number=RUN_AMOUNT, globals=globals())))
-result["pyber"]["1024-decaps"] = to_ms(min(timeit.repeat('decaps(dk, c)', number=RUN_AMOUNT, globals=globals())))
+result["pyber"]["1024-keygen"] = to_ms(min(timeit.repeat('keygen()', number=RUN_COUNT, globals=globals())))
+result["pyber"]["1024-encaps"] = to_ms(min(timeit.repeat('encaps(ek)', number=RUN_COUNT, globals=globals())))
+result["pyber"]["1024-decaps"] = to_ms(min(timeit.repeat('decaps(dk, c)', number=RUN_COUNT, globals=globals())))
 
 ek, dk = ML_KEM_1024.keygen()
 K, c = ML_KEM_1024.encaps(ek)
 
-result["kyber_py"]["1024-keygen"] = to_ms(min(timeit.repeat('ML_KEM_1024.keygen()', number=RUN_AMOUNT, globals=globals())))
-result["kyber_py"]["1024-encaps"] = to_ms(min(timeit.repeat('ML_KEM_1024.encaps(ek)', number=RUN_AMOUNT, globals=globals())))
-result["kyber_py"]["1024-decaps"] = to_ms(min(timeit.repeat('ML_KEM_1024.decaps(dk, c)', number=RUN_AMOUNT, globals=globals())))
+result["kyber_py"]["1024-keygen"] = to_ms(min(timeit.repeat('ML_KEM_1024.keygen()', number=RUN_COUNT, globals=globals())))
+result["kyber_py"]["1024-encaps"] = to_ms(min(timeit.repeat('ML_KEM_1024.encaps(ek)', number=RUN_COUNT, globals=globals())))
+result["kyber_py"]["1024-decaps"] = to_ms(min(timeit.repeat('ML_KEM_1024.decaps(dk, c)', number=RUN_COUNT, globals=globals())))
 
 def print_result():
     for imp, values in result.items():
