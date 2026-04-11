@@ -51,3 +51,4 @@ Fastest observed runtime over 20 runs on APPLE m1
 - [FIPS 203 - ML-KEM Standard](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.203.pdf) — NIST
 - [Kyber and Dilithium](https://cryptography101.ca/kyber-dilithium/) — Alfred Menezes, University of Waterloo
 - [Conceptual Review on Number Theoretic Transform and Comprehensive Review on Its Implementations](https://ieeexplore.ieee.org/document/10177902)
+- [kyber-py](https://github.com/GiacomoPope/kyber-py)
