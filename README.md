@@ -44,7 +44,7 @@ assert symmetric_key == symmetric_key_dec
 
 Fastest observed runtime over 20 runs on APPLE m1:
 
-![benchmark](./assets/benchmarkARM.png)
+![benchmark](./assets/benchmark_M1.png)
 
 ## References
 
